@@ -26,30 +26,105 @@
         <a href="../about.html">About</a>
         <a href="../contact.html">Contact</a>
         <a href="../projects.html">Past Projects</a>
+        <a href="../experiments.html">Experiments</a>
       </nav>
     </header>
-    <h1>Web Scraper</h1>
-    <p><strong>Objectives</strong></p>
-    <ol>
-      <li>Quickly identify individuals online whose personal information matches those provided by clients</li>
-      <li>Store all valid links with personally identifying information for client's consideration</li>
-      <li>Create visual displays of the qualitative results on each page to summarize found identity</li>
-    </ol>
-    <br>
-    <p><strong>Scraper Demo Video</strong></p>
-    <video width="320" height="240" controls>
-      <source src="../assets/videos/final-demo.mp4">
-      Your browser does not support the video tag.
-    </video>
-    <br>
-    <hr>
-    <br>
-    <footer>
-        Let's Get in Touch!
+    <main>
+      <h2>Web Scraper</h2>
+      <!-- To be positioned on right side of page once CSS allowed, summary of project objectives as specified by overseer
+        To be styled as example at this page: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/aside -->
+      <aside>
+        <p><i>"How might we assist clients anonymize their online presence even if they don't know what information exists about themselves online?"</i></p>
+      </aside>
+      <br>
+      <img src="../assets/images/webscraping.jpg" width="600" height="400">
+      <br>
+      <p><strong>Objectives</strong></p>
+      <ol>
+        <li>Quickly identify individuals online whose personal information matches those provided by clients</li>
+        <li>Store all valid links with personally identifying information for client's consideration</li>
+        <li>Create visual displays of the qualitative results on each page to summarize found identity</li>
+      </ol>
+      <br>
+      <p><strong>Scraper Demo Video</strong></p>
+      <video width="320" height="240" controls>
+        <source src="../assets/videos/final-demo.mp4">
+        Your browser does not support the video tag.
+      </video>
+      <br>
+      <br>
+      <p><strong>Code Snippet Example: Finding Relevant URLs</strong></p>
+      <code>
+        <pre>
+    
+    def get_results(search_term, eng, br):
+
+    browser = br
+    browser.get(eng)
+
+    res_x = x_paths_res[eng]
+    s_tag = x_paths_search_tag[eng]
+    s_name = x_paths_search_name[eng]
+
+    search_box = browser.find_element(s_tag, s_name)
+    search_box.send_keys(search_term)
+    search_box.submit()
+
+    for x in range(0,4):
+
+        WebDriverWait(browser, 100).until(EC.presence_of_element_located((By.XPATH, res_x)))
+
+        try:
+            results = browser.find_elements(By.XPATH, res_x)
+            currlinks = []
+
+            for r in results:
+                elem = r.find_element(By.TAG_NAME, "a")
+                currlinks.append(elem.get_attribute("href"))
+            
+        except:
+            print("Error extracting links")
+        
+        results = []
+
+        print("\n" + str(len(currlinks)) + " links found:\n")
+
+        for link in currlinks:
+            links.append(link)
+        
+        try:
+            next_btn = browser.find_element(By.XPATH, "//a[@id='pnnext']")
+            next_btn.click()
+        
+        except:
+            print("End of Results\n")
+
+    browser.close()
+
+    return results
+        </pre>
+      </code>
+      <br>
+      <p>After the conclusion of the scrape, the following summary documents are generated:</p>
+      <figure>
+        <img src="../assets/images/urlsample.jpg" width="600" height="400" alt="URL results display">
         <br>
-        <br>
+        <b>Figure 1:</b> List of URLs containing personally identifying information<br>
+        </figcaption>
+      </figure>
+      <br>
+      <figure>
+        <img src="../assets/images/infosample.jpg" width="600" height="400" alt="Info results display">
+        <figcaption>
+          <b>Right:</b> List of personally identifying information found on each URL, sorted by relevance <br>according to TFIDF scores
+        </figcaption>
+      </figure>
+      <br>
+      <hr>
+      <footer>
+        <h3>Let's Get in Touch!</h3>
         <a href="https://www.linkedin.com/in/evan-liu-195bba22a"> LinkedIn</a>
         <a href="https://github.com/EvanLiu0">GitHub</a>
-    </footer>
+      </footer>
   </body>
 </html>
