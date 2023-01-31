@@ -67,7 +67,7 @@
         The recording below demonstrates the process by which a user can record
         the completion of custom exercises.
       </p>
-      <video width="320" height="240" controls>
+      <video width="620" height="440" controls>
         <source src="../assets/videos/logging-demo.mp4" />
         Your browser does not support the video tag.
       </video>
@@ -75,59 +75,22 @@
       <br />
       <p><strong>Code Snippet Example: Finding Relevant URLs</strong></p>
       <p>
-        The following code snippet provides a basis for the application's
-        collection of client-relevant URLs.<br />
-        The method below abides by the open-closed principle by allowing for the
-        addition of new search engines and<br />
-        their corresponding xpaths without the need to modify the method itself.
+        The following code snippet demonstrates the primary way in which the
+        application's frontend interfaces communicates with its backend API.
+        Similar axios calls are used to retrieve user data, record new data, and
+        even load information about different preset exercises that can be
+        recorded. Ever want to learn how to perform a judo flip? One call to the
+        workout API can tell you that information in a matter of seconds.
+        However, it still can't help you perform said flip...
       </p>
       <!-- Code snippets to be styled when CSS permitted -->
       <code>
-        def get_results(search_term, eng, br): browser = br browser.get(eng)
-        res_x = x_paths_res[eng] s_tag = x_paths_search_tag[eng] s_name =
-        x_paths_search_name[eng] search_box = browser.find_element(s_tag,
-        s_name) search_box.send_keys(search_term) search_box.submit() for x in
-        range(0,4): WebDriverWait(browser,
-        100).until(EC.presence_of_element_located((By.XPATH, res_x))) try:
-        results = browser.find_elements(By.XPATH, res_x) currlinks = [] for r in
-        results: elem = r.find_element(By.TAG_NAME, "a")
-        currlinks.append(elem.get_attribute("href")) except: print("Error
-        extracting links") results = [] print("\n" + str(len(currlinks)) + "
-        links found:\n") for link in currlinks: links.append(link) try: next_btn
-        = browser.find_element(By.XPATH, "//a[@id='pnnext']") next_btn.click()
-        except: print("End of Results\n") browser.close() return results
+        const res = axios .post("http://localhost:8080/api/test/getInfo", {
+        user: String(username), }) .then((response) => {
+        console.log(response.data.message); }) .catch((error) => { if
+        (error.response) { console.log(error.response.data); } });
       </code>
       <br />
-      <p>
-        After the conclusion of the scrape, the following summary documents are
-        generated:
-      </p>
-      <figure>
-        <img
-          src="../assets/images/urlsample.jpg"
-          width="600"
-          height="400"
-          alt="URL results display"
-        />
-        <br />
-        <figcaption>
-          <b>Figure 1:</b> List of URLs containing personally identifying
-          information<br />
-        </figcaption>
-      </figure>
-      <br />
-      <figure>
-        <img
-          src="../assets/images/infosample.jpg"
-          width="600"
-          height="400"
-          alt="Info results display"
-        />
-        <figcaption>
-          <b>Figure 2:</b> List of personally identifying information found on
-          each URL, sorted by relevance <br />according to TFIDF scores
-        </figcaption>
-      </figure>
       <br />
       <hr />
     </main>
